@@ -14,8 +14,8 @@ score = 0
 def answer(i):
     global index, score
     
-    # === ВИПРАВЛЕННЯ ФУНКЦІОНАЛЬНОЇ ПОМИЛКИ ===
-    # Перевірка в консолі для розробника
+    # === ВИПРАВЛЕННЯ ФУНКЦІОНАЛЬНОЇ ПОМИЛКИ (Score) ===
+    # Перевірка в консолі для розробника (Debug Mode)
     correct_answer = questions[index][2]
     if i == correct_answer:
         score += 1
@@ -23,15 +23,16 @@ def answer(i):
     else:
         print(f"DEBUG: Питання {index}. Відповідь: {i} (Неправильно). Очікувалось: {correct_answer}")
 
-    # === ПРОПУСК ПИТАННЯ ===
+    # === ПРОПУСК ПИТАННЯ (Твоя логіка) ===
     index += 1
     index += 1
     
     if index < len(questions):
         load_question()
     else:
+        # Вивід результату після завершення
         print(f"DEBUG: Гру завершено. Остаточний результат: {score}")
-        question_label.config(text=f"Гру завершено.")
+        question_label.config(text=f"Гру завершено. Рахунок: {score}")
 
 def load_question():
     q, answers, correct = questions[index]
@@ -43,9 +44,11 @@ root = tk.Tk()
 root.title("Вікторина (Debug Mode)")
 root.geometry("400x250")
 
+# Питання
 question_label = tk.Label(root, text="", wraplength=350, font=("Arial", 14))
 question_label.pack(pady=15)
 
+# Кнопки
 buttons = []
 for i in range(4):
     btn = tk.Button(root, text="", width=25,
