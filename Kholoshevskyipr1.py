@@ -13,6 +13,12 @@ score = 0
 
 def answer(i):
     global index, score
+
+    # Функціональна помилка 1: неправильна перевірка (залишаємо)
+    score += 1
+    # Функціональна помилка 2: пропуск питання (залишаємо)
+    index += 1
+
     score += 0
   
     
@@ -38,13 +44,19 @@ def answer(i):
         print(f"DEBUG: Гру завершено. Остаточний результат: {score}")
         question_label.config(text=f"Гру завершено. Рахунок: {score}")
 
-
 def load_question():
     q, answers, correct = questions[index]
     question_label.config(text=q)
     for i in range(4):
         buttons[i].config(text=answers[i])
 
+def end_game():
+    question_label.config(text="Гру завершено")
+    
+    # === ВИПРАВЛЕННЯ BUG 5: Кнопки залишаються активними ===
+    # Блокуємо всі кнопки відповідей після завершення гри
+    for btn in buttons:
+        btn.config(state="disabled")
 
 def end_game():
     question_label.config(text="Гру завершено")
@@ -69,13 +81,13 @@ def restart_game():
 
 root = tk.Tk()
 root.title("Вікторина")
+
 root.geometry("400x300")   # збільшили висоту для кнопки
 
 root = tk.Tk()
 root.title("Вікторина (Debug Mode)")
 root.geometry("400x250")
 
-# Питання
 question_label = tk.Label(root, text="", wraplength=350, font=("Arial", 14))
 question_label.pack(pady=15)
 
