@@ -13,10 +13,22 @@ score = 0
 
 def answer(i):
     global index, score
+    
+    # Перевірка для зворотного зв'язку
+    correct_answer = questions[index][2]
+    if i == correct_answer:
+        score += 1
+        question_label.config(text="Правильно!")
+    else:
+        question_label.config(text="Неправильно!")
 
-    # Функціональна помилка 1: неправильна перевірка (залишаємо)
-    score += 1
-    # Функціональна помилка 2: пропуск питання (залишаємо)
+
+    # Пауза 1 секунда, щоб гравець побачив напис, а потім перемикання
+    root.after(1000, next_question)
+
+def next_question():
+    global index
+    # Твоя логіка з пропуском питання
     index += 1
 
     score += 0
@@ -30,25 +42,32 @@ def answer(i):
         print(f"DEBUG: Питання {index}. Відповідь: {i} (Правильно). Рахунок: {score}")
     else:
         print(f"DEBUG: Питання {index}. Відповідь: {i} (Неправильно). Очікувалось: {correct_answer}")
-
-    # === ПРОПУСК ПИТАННЯ (Твоя логіка) ===
-    index += 1
     
     if index < len(questions):
         load_question()
     else:
 
-        end_game()
+        # В кінці гри показуємо результат, кнопки залишаються активними
+        question_label.config(text=f"Гру завершено. Результат: {score}")
 
+        end_game()
+        
+        end_gamee()
+        
         # Вивід результату після завершення
         print(f"DEBUG: Гру завершено. Остаточний результат: {score}")
         question_label.config(text=f"Гру завершено. Рахунок: {score}")
+
 
 def load_question():
     q, answers, correct = questions[index]
     question_label.config(text=q)
     for i in range(4):
         buttons[i].config(text=answers[i])
+
+
+root = tk.Tk()
+root.title("Вікторина")
 
 def end_game():
     question_label.config(text="Гру завершено")
@@ -58,7 +77,7 @@ def end_game():
     for btn in buttons:
         btn.config(state="disabled")
 
-def end_game():
+def end_gamee():
     question_label.config(text="Гру завершено")
     
     # === ВИПРАВЛЕННЯ BUG 3: Додаємо кнопку Restart ===
@@ -84,13 +103,10 @@ root.title("Вікторина")
 
 root.geometry("400x300")   # збільшили висоту для кнопки
 
-root = tk.Tk()
-root.title("Вікторина (Debug Mode)")
-root.geometry("400x250")
-
 question_label = tk.Label(root, text="", wraplength=350, font=("Arial", 14))
 question_label.pack(pady=15)
 
+# Кнопки (кольори та активність як у тебе)
 buttons = []
 for i in range(4):
     btn = tk.Button(root, text="", width=25,
