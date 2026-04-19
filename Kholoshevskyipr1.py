@@ -8,50 +8,41 @@ questions = [
     ("Python це?", ["Мова програмування", "Редактор", "Браузер", "Гра"], 0)
 ]
 
-# Зміни в новій гілці
-
 index = 0
 score = 0
 
 def answer(i):
     global index, score
-
-    # Функціональна помилка 1: неправильна перевірка
+    # Функціональна помилка 1: неправильна перевірка (залишаємо)
     score += 1
-
+    # Функціональна помилка 2: пропуск питання (залишаємо)
     index += 1
-
-    # Функціональна помилка 2: пропуск питання
     index += 1
-
+    
     if index < len(questions):
         load_question()
     else:
-        question_label.config(text="Гру завершено")
-
-        # UI помилка: не показує результат
-        # UI помилка: кнопки залишаються активними
-
+        end_game()   # ← викликаємо функцію завершення
 
 def load_question():
     q, answers, correct = questions[index]
-
     question_label.config(text=q)
-
     for i in range(4):
         buttons[i].config(text=answers[i])
 
+def end_game():
+    # === ВИПРАВЛЕННЯ BUG 4 ===
+    # Замість простого "Гру завершено" показуємо результат
+    result_text = f"Гру завершено!\n\nВаш результат: {score} з {len(questions)}"
+    question_label.config(text=result_text, font=("Arial", 14), fg="blue")
 
 root = tk.Tk()
 root.title("Вікторина")
+root.geometry("400x280")
 
-root.geometry("400x250")
+question_label = tk.Label(root, text="", wraplength=350, font=("Arial", 14), justify="center")
+question_label.pack(pady=40)
 
-# Питання
-question_label = tk.Label(root, text="", wraplength=350, font=("Arial", 14))
-question_label.pack(pady=15)
-
-# Кнопки
 buttons = []
 for i in range(4):
     btn = tk.Button(root, text="", width=25,
@@ -60,5 +51,4 @@ for i in range(4):
     buttons.append(btn)
 
 load_question()
-
 root.mainloop()
