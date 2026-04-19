@@ -11,72 +11,46 @@ questions = [
 index = 0
 score = 0
 
-def answer(selected_index):
+def answer(i):
     global index, score
     
-    correct_index = questions[index][2]
-    correct_answer_text = questions[index][1][correct_index]
-    
-    # === ВИПРАВЛЕНО BUG 1: неправильна перевірка відповіді ===
-    if selected_index == correct_index:
+    # === ВИПРАВЛЕННЯ ФУНКЦІОНАЛЬНОЇ ПОМИЛКИ ===
+    # Перевірка в консолі для розробника
+    correct_answer = questions[index][2]
+    if i == correct_answer:
         score += 1
-        feedback = "✅ Правильно!"
-        color = "green"
+        print(f"DEBUG: Питання {index}. Відповідь: {i} (Правильно). Рахунок: {score}")
     else:
-        feedback = f"❌ Неправильно.\nПравильна відповідь: {correct_answer_text}"
-        color = "red"
-    
-    # Показуємо фідбек у грі
-    question_label.config(text=feedback, fg=color, font=("Arial", 13))
-    
-    # Блокуємо кнопки на час фідбеку
-    for btn in buttons:
-        btn.config(state="disabled")
-    
-    # Затримка перед наступним питанням
-    root.after(1500, next_question)
+        print(f"DEBUG: Питання {index}. Відповідь: {i} (Неправильно). Очікувалось: {correct_answer}")
 
-def next_question():
-    global index
-    # === BUG 2: Пропуск питань (навмисно залишено для демонстрації) ===
-    # Через цей рядок питання пропускаються
-    index += 1      # перший раз
-    index += 1      # другий раз → питання пропускається
+    # === ПРОПУСК ПИТАННЯ ===
+    index += 1
+    index += 1
     
     if index < len(questions):
         load_question()
     else:
-        end_game()
+        print(f"DEBUG: Гру завершено. Остаточний результат: {score}")
+        question_label.config(text=f"Гру завершено.")
 
 def load_question():
-    q, answers, _ = questions[index]
-    question_label.config(text=q, fg="black", font=("Arial", 14))
-    
+    q, answers, correct = questions[index]
+    question_label.config(text=q)
     for i in range(4):
-        buttons[i].config(text=answers[i], state="normal")
+        buttons[i].config(text=answers[i])
 
-def end_game():
-    question_label.config(
-        text=f"Гру завершено!\n\nВаш результат: {score} з {len(questions)}",
-        fg="blue",
-        font=("Arial", 14)
-    )
-    for btn in buttons:
-        btn.config(state="disabled")
-
-# ====================== GUI ======================
 root = tk.Tk()
-root.title("Вікторина")
-root.geometry("520x380")
+root.title("Вікторина (Debug Mode)")
+root.geometry("400x250")
 
-question_label = tk.Label(root, text="", wraplength=480, font=("Arial", 14), justify="center")
-question_label.pack(pady=30)
+question_label = tk.Label(root, text="", wraplength=350, font=("Arial", 14))
+question_label.pack(pady=15)
 
 buttons = []
 for i in range(4):
-    btn = tk.Button(root, text="", width=40, height=2, font=("Arial", 10),
+    btn = tk.Button(root, text="", width=25,
                     command=lambda i=i: answer(i))
-    btn.pack(pady=6)
+    btn.pack(pady=3)
     buttons.append(btn)
 
 load_question()
