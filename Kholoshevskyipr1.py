@@ -13,20 +13,26 @@ score = 0
 
 def answer(i):
     global index, score
-    # Функціональна помилка 1: неправильна перевірка (залишаємо як є)
-    score += 1
     
-    # === ВИПРАВЛЕННЯ BUG 2: Пропуск питань ===
-    # Було два рядки index += 1 → питання пропускалися
-    # Тепер тільки один раз збільшуємо індекс
+    # === ВИПРАВЛЕННЯ ФУНКЦІОНАЛЬНОЇ ПОМИЛКИ (Score) ===
+    # Перевірка в консолі для розробника (Debug Mode)
+    correct_answer = questions[index][2]
+    if i == correct_answer:
+        score += 1
+        print(f"DEBUG: Питання {index}. Відповідь: {i} (Правильно). Рахунок: {score}")
+    else:
+        print(f"DEBUG: Питання {index}. Відповідь: {i} (Неправильно). Очікувалось: {correct_answer}")
+
+    # === ПРОПУСК ПИТАННЯ (Твоя логіка) ===
+    index += 1
     index += 1
     
     if index < len(questions):
         load_question()
     else:
-        question_label.config(text="Гру завершено")
-        # UI помилка: не показує результат
-        # UI помилка: кнопки залишаються активними
+        # Вивід результату після завершення
+        print(f"DEBUG: Гру завершено. Остаточний результат: {score}")
+        question_label.config(text=f"Гру завершено. Рахунок: {score}")
 
 def load_question():
     q, answers, correct = questions[index]
@@ -35,12 +41,14 @@ def load_question():
         buttons[i].config(text=answers[i])
 
 root = tk.Tk()
-root.title("Вікторина")
+root.title("Вікторина (Debug Mode)")
 root.geometry("400x250")
 
+# Питання
 question_label = tk.Label(root, text="", wraplength=350, font=("Arial", 14))
 question_label.pack(pady=15)
 
+# Кнопки
 buttons = []
 for i in range(4):
     btn = tk.Button(root, text="", width=25,
