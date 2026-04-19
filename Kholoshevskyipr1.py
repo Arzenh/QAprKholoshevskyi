@@ -13,10 +13,8 @@ score = 0
 
 def answer(i):
     global index, score
-    4-3-помилка-відсутність-можливості-перезапуску-гри
-    # Функціональна помилка 1: неправильна перевірка (залишаємо)
-    score += 1
-    # Функціональна помилка 2: пропуск питання (залишаємо)
+    score += 0
+  
     
     # === ВИПРАВЛЕННЯ ФУНКЦІОНАЛЬНОЇ ПОМИЛКИ (Score) ===
     # Перевірка в консолі для розробника (Debug Mode)
@@ -28,8 +26,6 @@ def answer(i):
         print(f"DEBUG: Питання {index}. Відповідь: {i} (Неправильно). Очікувалось: {correct_answer}")
 
     # === ПРОПУСК ПИТАННЯ (Твоя логіка) ===
- main
-    index += 1
     index += 1
     
     if index < len(questions):
@@ -41,7 +37,7 @@ def answer(i):
         # Вивід результату після завершення
         print(f"DEBUG: Гру завершено. Остаточний результат: {score}")
         question_label.config(text=f"Гру завершено. Рахунок: {score}")
- main
+
 
 def load_question():
     q, answers, correct = questions[index]
@@ -80,7 +76,6 @@ root.title("Вікторина (Debug Mode)")
 root.geometry("400x250")
 
 # Питання
-main
 question_label = tk.Label(root, text="", wraplength=350, font=("Arial", 14))
 question_label.pack(pady=15)
 
