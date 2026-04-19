@@ -13,22 +13,42 @@ score = 0
 
 def answer(i):
     global index, score
+    4-3-помилка-відсутність-можливості-перезапуску-гри
     # Функціональна помилка 1: неправильна перевірка (залишаємо)
     score += 1
     # Функціональна помилка 2: пропуск питання (залишаємо)
+    
+    # === ВИПРАВЛЕННЯ ФУНКЦІОНАЛЬНОЇ ПОМИЛКИ (Score) ===
+    # Перевірка в консолі для розробника (Debug Mode)
+    correct_answer = questions[index][2]
+    if i == correct_answer:
+        score += 1
+        print(f"DEBUG: Питання {index}. Відповідь: {i} (Правильно). Рахунок: {score}")
+    else:
+        print(f"DEBUG: Питання {index}. Відповідь: {i} (Неправильно). Очікувалось: {correct_answer}")
+
+    # === ПРОПУСК ПИТАННЯ (Твоя логіка) ===
+ main
     index += 1
     index += 1
     
     if index < len(questions):
         load_question()
     else:
+
         end_game()
+
+        # Вивід результату після завершення
+        print(f"DEBUG: Гру завершено. Остаточний результат: {score}")
+        question_label.config(text=f"Гру завершено. Рахунок: {score}")
+ main
 
 def load_question():
     q, answers, correct = questions[index]
     question_label.config(text=q)
     for i in range(4):
         buttons[i].config(text=answers[i])
+
 
 def end_game():
     question_label.config(text="Гру завершено")
@@ -55,6 +75,12 @@ root = tk.Tk()
 root.title("Вікторина")
 root.geometry("400x300")   # збільшили висоту для кнопки
 
+root = tk.Tk()
+root.title("Вікторина (Debug Mode)")
+root.geometry("400x250")
+
+# Питання
+main
 question_label = tk.Label(root, text="", wraplength=350, font=("Arial", 14))
 question_label.pack(pady=15)
 
