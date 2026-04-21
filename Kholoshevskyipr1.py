@@ -14,73 +14,59 @@ score = 0
 def answer(i):
     global index, score
     
-    # Перевірка для зворотного зв'язку
+    if index >= len(questions):
+        return
+
+    # 1. Перевірка відповіді
     correct_answer = questions[index][2]
-    if i == correct_answer:
-        score += 1
-        question_label.config(text="Правильно!")
-    else:
-        question_label.config(text="Неправильно!")
-
-
-    # Пауза 1 секунда, щоб гравець побачив напис, а потім перемикання
-    root.after(1000, next_question)
-
-def next_question():
-    global index
-    # Твоя логіка з пропуском питання
-    index += 1
-
-    score += 0
-  
     
-    # === ВИПРАВЛЕННЯ ФУНКЦІОНАЛЬНОЇ ПОМИЛКИ (Score) ===
-    # Перевірка в консолі для розробника (Debug Mode)
-    correct_answer = questions[index][2]
-    if i == correct_answer:
-        score += 1
-        print(f"DEBUG: Питання {index}. Відповідь: {i} (Правильно). Рахунок: {score}")
-    else:
-        print(f"DEBUG: Питання {index}. Відповідь: {i} (Неправильно). Очікувалось: {correct_answer}")
-    
-    if index < len(questions):
-        load_question()
-    else:
-
-        # В кінці гри показуємо результат, кнопки залишаються активними
-        question_label.config(text=f"Гру завершено. Результат: {score}")
-
-        end_game()
-        
-        end_gamee()
-        
-        # Вивід результату після завершення
-        print(f"DEBUG: Гру завершено. Остаточний результат: {score}")
-        question_label.config(text=f"Гру завершено. Рахунок: {score}")
-
-
-def load_question():
-    q, answers, correct = questions[index]
-    question_label.config(text=q)
-    for i in range(4):
-        buttons[i].config(text=answers[i])
-
-
-root = tk.Tk()
-root.title("Вікторина")
-
-def end_game():
-    question_label.config(text="Гру завершено")
-    
-    # === ВИПРАВЛЕННЯ BUG 5: Кнопки залишаються активними ===
-    # Блокуємо всі кнопки відповідей після завершення гри
+    # Блокуємо кнопки на секунду, щоб гравець не міг "наклікати" зайвого
     for btn in buttons:
         btn.config(state="disabled")
 
-def end_gamee():
-    question_label.config(text="Гру завершено")
+    if i == correct_answer:
+        score += 1
+        feedback = "✅ ПРАВИЛЬНО!"
+        print(f"DEBUG: Питання {index}. Правильно! Рахунок: {score}")
+    else:
+        feedback = f"❌ НЕПРАВИЛЬНО!\n(Правильна відповідь: {questions[index][1][correct_answer]})"
+        print(f"DEBUG: Питання {index}. Неправильно!")
+
+    # Відображаємо результат прямо на екрані
+    question_label.config(text=feedback)
+
+    # 2. Збільшуємо індекс
+    index += 1
     
-    # === ВИПРАВЛЕННЯ BUG 3: Додаємо кнопку Restart ===
+    # 3. Пауза 1.5 секунди, щоб гравець встиг прочитати текст, а потім наступне питання
+    if index < len(questions):
+        root.after(1500, load_question)
+    else:
+        root.after(1500, end_game)
+
+def load_question():
+    # Повертаємо кнопкам робочий стан при завантаженні нового питання
+    q, answers, correct = questions[index]
+    question_label.config(text=q)
+    for i in range(4):
+        buttons[i].config(text=answers[i], state="normal")
+
+def end_game():
+    question_label.config(text=f"Гру завершено.\nВаш рахунок: {score}")
+    
+    # Блокуємо кнопки відповідей
+    for btn in buttons:
+        btn.config(state="disabled")
+    
+    # Додаємо кнопку Restart (якщо її ще немає)
+    show_restart_button()
+
+def show_restart_button():
+    # Перевірка, щоб не створювати декілька кнопок
+    for widget in root.winfo_children():
+        if isinstance(widget, tk.Button) and widget.cget("text") == "Почати гру заново":
+            return
+            
     restart_btn = tk.Button(root, text="Почати гру заново", 
                           width=25, height=2, font=("Arial", 10), 
                           bg="#4CAF50", fg="white",
@@ -91,27 +77,28 @@ def restart_game():
     global index, score
     index = 0
     score = 0
-    # Видаляємо кнопку Restart (якщо вона є)
+    # Видаляємо кнопку Restart
     for widget in root.winfo_children():
         if isinstance(widget, tk.Button) and widget.cget("text") == "Почати гру заново":
             widget.destroy()
     
     load_question()
 
+# Налаштування вікна (ТІЛЬКИ ОДИН РАЗ)
 root = tk.Tk()
-root.title("Вікторина")
+root.title("Вікторина (Debug Mode)")
+root.geometry("640x480")
 
-root.geometry("400x300")   # збільшили висоту для кнопки
-
-question_label = tk.Label(root, text="", wraplength=350, font=("Arial", 14))
+question_label = tk.Label(root, text="", wraplength=350, font=("Arial", 18))
 question_label.pack(pady=15)
 
-# Кнопки (кольори та активність як у тебе)
 buttons = []
 for i in range(4):
-    btn = tk.Button(root, text="", width=25,
+    # Додаємо параметр font=("Назва шрифту", розмір, "стиль")
+    btn = tk.Button(root, text="", width=40, height=2,
+                    font=("Arial", 14, "bold"), 
                     command=lambda i=i: answer(i))
-    btn.pack(pady=3)
+    btn.pack(pady=10)
     buttons.append(btn)
 
 load_question()
