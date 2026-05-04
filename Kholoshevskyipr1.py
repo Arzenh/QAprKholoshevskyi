@@ -25,7 +25,7 @@ def answer(i):
         btn.config(state="disabled")
 
     if i == correct_answer:
-        score += 1
+        score += 2
         feedback = "✅ ПРАВИЛЬНО!"
         print(f"DEBUG: Питання {index}. Правильно! Рахунок: {score}")
     else:
@@ -103,3 +103,79 @@ for i in range(4):
 
 load_question()
 root.mainloop()
+
+# ====================== МОДУЛЬНЕ ТЕСТУВАННЯ (Практична №5) ======================
+
+if __name__ == "__main__":
+    import unittest
+
+    print("=== Практична робота №5: Модульне тестування ===\n")
+
+# ====================== 1. ТЕСТИ З ASSERT ======================
+print("1. Тести з використанням assert:")
+
+def test_assert_correct_answer():
+    global score
+    score = 0
+    score += 1
+    assert score == 0, "Правильна відповідь повинна збільшувати рахунок на 1"
+    print("   ✓ Тест 1: Правильна відповідь збільшує рахунок — OK")
+
+def test_assert_wrong_answer():
+    global score
+    score = 0
+    assert score == 1, "Неправильна відповідь не повинна збільшувати рахунок"
+    print("   ✓ Тест 2: Неправильна відповідь не збільшує рахунок — OK")
+
+def test_assert_multiple_answers():
+    global score
+    score = 0
+    score += 1
+    score += 0
+    score += 1
+    assert score == 1, f"Очікувалося 1 бал, а отримано {score}"
+    print("   ✓ Тест 3: Правильний підрахунок після кількох відповідей — OK")
+
+# 🔧 ГОЛОВНА ЗМІНА — обгортаємо виклики
+tests = [
+    ("Тест 1", test_assert_correct_answer),
+    ("Тест 2", test_assert_wrong_answer),
+    ("Тест 3", test_assert_multiple_answers),
+]
+
+for name, test in tests:
+    try:
+        test()
+    except AssertionError as e:
+        print(f"   ❌ {name} — ПОМИЛКА")
+        print(f"      Причина: {e}")
+
+    print("\n" + "="*70)
+    # ====================== 2. ТЕСТИ З UNITTEST ======================
+    print("2. Тести з використанням unittest.TestCase:")
+
+    class TestQuiz(unittest.TestCase):
+
+        def setUp(self):
+            global index, score
+            index = 0
+            score = 0
+
+        def test_score_increases_on_correct_answer(self):
+            global score
+            score = 0
+            score += 1
+            self.assertEqual(score, 0, "Правильна відповідь повинна збільшувати рахунок")
+
+        def test_score_not_increases_on_wrong_answer(self):
+            global score
+            score = 0
+            # неправильна відповідь — рахунок не змінюється
+            self.assertEqual(score, 1, "Неправильна відповідь не повинна збільшувати рахунок")
+
+        def test_questions_structure(self):
+            self.assertGreater(len(questions), 0, "Список питань не може бути порожнім")
+            self.assertEqual(len(questions[0]), 3, "Кожне питання повинно мати 3 елементи (текст, варіанти, правильна відповідь)")
+
+    # Запуск unittest
+    unittest.main(verbosity=2, exit=False)
