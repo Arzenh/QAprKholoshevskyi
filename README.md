@@ -31,3 +31,7 @@ cd quiz-app
 Запуск програми
 
 python Kholoshevskyipr1.py
+
+🖥 Інтерфейс застосунку
+
+
