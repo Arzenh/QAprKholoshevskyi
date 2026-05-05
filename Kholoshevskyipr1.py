@@ -1,5 +1,6 @@
 import tkinter as tk
 
+
 questions = [
     ("Столиця Франції?", ["Берлін", "Париж", "Рим", "Мадрид"], 1),
     ("2 + 2 =", ["3", "4", "5", "6"], 1),
@@ -25,7 +26,7 @@ def answer(i):
         btn.config(state="disabled")
 
     if i == correct_answer:
-        score += 2
+        score += 1
         feedback = "✅ ПРАВИЛЬНО!"
         print(f"DEBUG: Питання {index}. Правильно! Рахунок: {score}")
     else:
@@ -104,78 +105,73 @@ for i in range(4):
 load_question()
 root.mainloop()
 
-# ====================== МОДУЛЬНЕ ТЕСТУВАННЯ (Практична №5) ======================
+import pytest
 
-if __name__ == "__main__":
-    import unittest
+score = 0
+index = 0
 
-    print("=== Практична робота №5: Модульне тестування ===\n")
 
-# ====================== 1. ТЕСТИ З ASSERT ======================
-print("1. Тести з використанням assert:")
-
-def test_assert_correct_answer():
-    global score
+# ======================
+# FIXTURE
+# ======================
+@pytest.fixture
+def reset_game():
+    global score, index
     score = 0
-    score += 1
-    assert score == 0, "Правильна відповідь повинна збільшувати рахунок на 1"
-    print("   ✓ Тест 1: Правильна відповідь збільшує рахунок — OK")
+    index = 0
 
-def test_assert_wrong_answer():
+
+# ======================
+# ASSERT ТЕСТИ
+# ======================
+def test_assert_1(reset_game):
     global score
+    score = 1
+    assert score == 1
+
+
+def test_assert_2(reset_game):
     score = 0
-    assert score == 1, "Неправильна відповідь не повинна збільшувати рахунок"
-    print("   ✓ Тест 2: Неправильна відповідь не збільшує рахунок — OK")
+    assert score == 0
 
-def test_assert_multiple_answers():
-    global score
-    score = 0
-    score += 1
-    score += 0
-    score += 1
-    assert score == 1, f"Очікувалося 1 бал, а отримано {score}"
-    print("   ✓ Тест 3: Правильний підрахунок після кількох відповідей — OK")
 
-# 🔧 ГОЛОВНА ЗМІНА — обгортаємо виклики
-tests = [
-    ("Тест 1", test_assert_correct_answer),
-    ("Тест 2", test_assert_wrong_answer),
-    ("Тест 3", test_assert_multiple_answers),
-]
+# ======================
+# PARAMETRIZE
+# ======================
+@pytest.mark.parametrize("input_value", [0, 1, 2])
+def test_parametrize(input_value):
+    assert isinstance(input_value, int)
 
-for name, test in tests:
-    try:
-        test()
-    except AssertionError as e:
-        print(f"   ❌ {name} — ПОМИЛКА")
-        print(f"      Причина: {e}")
 
-    print("\n" + "="*70)
-    # ====================== 2. ТЕСТИ З UNITTEST ======================
-    print("2. Тести з використанням unittest.TestCase:")
+# ======================
+# RAISES
+# ======================
+def test_raises():
+    with pytest.raises(ZeroDivisionError):
+        1 / 0
 
-    class TestQuiz(unittest.TestCase):
 
-        def setUp(self):
-            global index, score
-            index = 0
-            score = 0
+# ======================
+# SKIP
+# ======================
+@pytest.mark.skip(reason="Демонстраційний тест")
+def test_skip():
+    assert False
 
-        def test_score_increases_on_correct_answer(self):
-            global score
-            score = 0
-            score += 1
-            self.assertEqual(score, 0, "Правильна відповідь повинна збільшувати рахунок")
 
-        def test_score_not_increases_on_wrong_answer(self):
-            global score
-            score = 0
-            # неправильна відповідь — рахунок не змінюється
-            self.assertEqual(score, 1, "Неправильна відповідь не повинна збільшувати рахунок")
+# ======================
+# XFAIL
+# ======================
+@pytest.mark.xfail(reason="Відомий баг")
+def test_xfail():
+    assert 2 + 2 == 5
 
-        def test_questions_structure(self):
-            self.assertGreater(len(questions), 0, "Список питань не може бути порожнім")
-            self.assertEqual(len(questions[0]), 3, "Кожне питання повинно мати 3 елементи (текст, варіанти, правильна відповідь)")
 
-    # Запуск unittest
-    unittest.main(verbosity=2, exit=False)
+# ======================
+# ПОМИЛКОВІ ТЕСТИ
+# ======================
+def test_error_1():
+    assert 2 + 2 == 5
+
+def test_error_2():
+    assert "A" == "a"
