@@ -26,6 +26,7 @@
 ### 1. Клонування репозиторію
 ```bash
 git clone https://github.com/Arzenh/QAprKholoshevskyi.git
+cd QAprKholoshevskyi
 ```
 Запуск програми
 
@@ -33,14 +34,30 @@ python Kholoshevskyipr1.py
 
 ## 🖥 Інтерфейс застосунку
 
-Початок вікторини
+### Головне вікно вікторини
 
 ![Image alt](https://github.com/Arzenh/QAprKholoshevskyi/blob/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202026-05-05%20212656.png)
 
-Вибір відповіді
+### Процес гри (вибір відповіді)
 
 ![Image alt](https://github.com/Arzenh/QAprKholoshevskyi/blob/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202026-05-05%20214004.png)
 
-Фінал вікторини
+### Результат гри
 
 ![Image alt](https://github.com/Arzenh/QAprKholoshevskyi/blob/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202026-05-05%20214520.png)
+
+## 🛠 Технології
+
+- Python 3.14.4
+- Tkinter (GUI)
+
+## 🧩 Як працює застосунок
+
+1. Користувач запускає програму
+2. Відкривається вікно "Вікторина"
+3. Відображається питання та 4 варіанти відповідей
+4. Користувач обирає відповідь кнопкою
+5. Програма показує:
+   - ✔ правильна відповідь
+   - ❌ неправильна відповідь
+6. В кінці показується фінальний результат
