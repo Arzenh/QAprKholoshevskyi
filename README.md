@@ -34,5 +34,3 @@ python Kholoshevskyipr1.py
 
 🖥 Інтерфейс застосунку
 
-
-<img width="635" height="501" alt="изображение" src="https://github.com/user-attachments/assets/ff87833a-8f16-49e0-b49c-740bb48aa076" />
