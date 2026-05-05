@@ -27,7 +27,7 @@ Quiz App — це графічний застосунок, який дозвол
 ```bash
 git clone https://github.com/Arzenh/QAprKholoshevskyi.git
 cd quiz-app
-
+```
 Запуск програми
 
 python Kholoshevskyipr1.py
